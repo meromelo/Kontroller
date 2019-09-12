@@ -18,32 +18,34 @@ class SensorSender(hidDevice: BluetoothHidDevice, host: BluetoothDevice): Sender
 
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        Log.i("SensorSender", "onAccuracyChanged")
         Log.d(TAG, "Accuracy changed ${when(accuracy) {
-            SensorManager.SENSOR_STATUS_ACCURACY_LOW -> "LOW"
+            SensorManager.SENSOR_STATUS_ACCURACY_LOW    -> "LOW"
             SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> "MEDIUM"
-            SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> "HIGH"
+            SensorManager.SENSOR_STATUS_ACCURACY_HIGH   -> "HIGH"
             else -> accuracy.toString()
         }}")
     }
 
     override fun onSensorChanged(event: SensorEvent) {
-        val angleX = event.values[2].toDouble()
-        val angleY = event.values[0].toDouble()
+        Log.i("SensorSender", "onSensorChanged")
+        val angleX  = event.values[2].toDouble()
+        val angleY  = event.values[0].toDouble()
         val pixelsX = (angleX * 3840 / PI).roundToInt() + 1920
         val pixelsY = (angleY * 2160 / PI).roundToInt() + 1080
+        Log.i("SensorSender", "angle=[$angleX,$angleY], pixels=[$pixelsX,$pixelsY]")
         Log.wtf("WTF", "$pixelsX x $pixelsY")
-        if (pixelsX != absMouseReport.X || pixelsY != absMouseReport.Y) {
+        if( pixelsX != absMouseReport.X || pixelsY != absMouseReport.Y ) {
             absMouseReport.X = pixelsX
             absMouseReport.Y = pixelsY
             hidDevice.sendReport(this.host, 2, absMouseReport.bytes)
-
         } else {
             Log.i("WTF", "No changes")
         }
     }
 
     override fun sendMouse() {
-
+        Log.i("SensorSender", "sendMouse")
     }
 
 }

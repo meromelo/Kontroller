@@ -15,18 +15,21 @@ open class Sender(
     protected val mouseReport = MouseReport()
 
     protected open fun sendMouse() {
-        if (!hidDevice.sendReport(host, MouseReport.ID, mouseReport.bytes)) {
+        Log.i("Sender", "sendMouse")
+        if( !hidDevice.sendReport(host, MouseReport.ID, mouseReport.bytes) ) {
             Log.e(TAG, "Report wasn't sent")
         }
     }
 
     fun sendTestMouseMove() {
+        Log.i("Sender", "sendTestMouseMove")
         mouseReport.dx = 20
         mouseReport.dy = 20
         sendMouse()
     }
 
     fun sendTestClick() {
+        Log.i("Sender", "sendTestClick")
         mouseReport.leftButton = true
         sendMouse()
         Timer().schedule(150L) {

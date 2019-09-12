@@ -2,14 +2,17 @@ package com.github.roarappstudio.btkontroller.reports
 
 import kotlin.experimental.and
 import kotlin.experimental.or
+// import android.util.Log
 
 @Suppress("EXPERIMENTAL_FEATURE_WARNING")
 inline class TrackpadMouseReport (
     val bytes: ByteArray = ByteArray(5) {0}
     ) {
 
+//    Log.i("TrackpadMouseReport", "TrackpadMouseReport")
 
-        var leftButton: Boolean
+
+    var leftButton: Boolean
         get() = bytes[0] and 0b1 != 0.toByte()
         set(value) {
             bytes[0] = if (value)

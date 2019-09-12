@@ -13,18 +13,23 @@ open class RelativeMouseSender(
     val host: BluetoothDevice
 
 ) {
+    //
+    //  params
+    //
     val mouseReport = ScrollableTrackpadMouseReport()
     var previousvscroll :Int=0
     var previoushscroll :Int =0
 
 
     protected open fun sendMouse() {
-        if (!hidDevice.sendReport(host, ScrollableTrackpadMouseReport.ID, mouseReport.bytes)) {
+        Log.i("RelativeMouseSender", "sendMouse")
+        if( !hidDevice.sendReport(host, ScrollableTrackpadMouseReport.ID, mouseReport.bytes) ) {
             Log.e(TAG, "Report wasn't sent")
         }
     }
 
     fun sendTestMouseMove() {
+        Log.i("RelativeMouseSender", "sendTestMouseMove")
         mouseReport.dxLsb = 20
         mouseReport.dyLsb = 20
         mouseReport.dxMsb = 20
@@ -33,6 +38,7 @@ open class RelativeMouseSender(
     }
 
     fun sendTestClick() {
+        Log.i("RelativeMouseSender", "sendTestClick")
         mouseReport.leftButton = true
         sendMouse()
         mouseReport.leftButton = false
@@ -41,7 +47,9 @@ open class RelativeMouseSender(
 //
 //        }
     }
+
     fun sendDoubleTapClick() {
+        Log.i("RelativeMouseSender", "sendDoubleTapClick")
         mouseReport.leftButton = true
         sendMouse()
         Timer().schedule(100L) {
@@ -54,10 +62,6 @@ open class RelativeMouseSender(
                     mouseReport.leftButton = false
                     sendMouse()
                 }
-
-
-
-
             }
         }
     }
@@ -65,17 +69,20 @@ open class RelativeMouseSender(
 
 
     fun sendLeftClickOn() {
+        Log.i("RelativeMouseSender", "sendLeftClickOn")
         mouseReport.leftButton = true
         sendMouse()
-
-
     }
+
     fun sendLeftClickOff() {
+        Log.i("RelativeMouseSender", "sendLeftClickOff")
         mouseReport.leftButton = false
         sendMouse()
 
     }
+
     fun sendRightClick() {
+        Log.i("RelativeMouseSender", "sendRightClick")
         mouseReport.rightButton = true
         sendMouse()
         Timer().schedule(50L) {
@@ -85,48 +92,40 @@ open class RelativeMouseSender(
     }
 
     fun sendScroll(vscroll:Int,hscroll:Int){
+        Log.i("RelativeMouseSender", "sendScroll")
 
-        var hscrollmutable=0
-        var vscrollmutable =0
+        var hscrollmutable  = 0
+        var vscrollmutable  = 0
 
-        hscrollmutable=hscroll
-        vscrollmutable= vscroll
+        hscrollmutable      = hscroll
+        vscrollmutable      = vscroll
 
 //        var dhscroll= hscrollmutable-previoushscroll
 //        var dvscroll= vscrollmutable-previousvscroll
 //
 //        dhscroll = Math.abs(dhscroll)
 //        dvscroll = Math.abs(dvscroll)
-//        if(dvscroll>=dhscroll)
-//        {
+//        if(dvscroll>=dhscroll) {
 //            hscrollmutable=0
-//
-//        }
-//        else
-//        {
+//        } else {
 //            vscrollmutable=0
 //        }
-        var vs:Int =(vscrollmutable)
-        var hs:Int =(hscrollmutable)
-        Log.i("vscroll ",vscroll.toString())
-        Log.i("vs ",vs.toString())
-        Log.i("hscroll ",hscroll.toString())
-        Log.i("hs ",hs.toString())
+//
+        var vs:Int = (vscrollmutable)
+        var hs:Int = (hscrollmutable)
+        Log.i("RelativeMouseSender", "vscroll " + vscroll.toString())
+        Log.i("RelativeMouseSender", "vs "      + vs.toString())
+        Log.i("RelativeMouseSender", "hscroll " + hscroll.toString())
+        Log.i("RelativeMouseSender", "hs "      + hs.toString())
 
-
-        mouseReport.vScroll=vs.toByte()
-        mouseReport.hScroll= hs.toByte()
+        mouseReport.vScroll = vs.toByte()
+        mouseReport.hScroll = hs.toByte()
 
         sendMouse()
 
-//        previousvscroll=-1*vscroll
-//        previoushscroll=hscroll
-
-
+//      previousvscroll=-1*vscroll
+//      previoushscroll=hscroll
     }
-
-
-
 
     companion object {
         const val TAG = "TrackPadSender"
